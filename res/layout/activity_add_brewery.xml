@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/addBreweryTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="Add new Brewery"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <View
+        android:id="@+id/addBrewerySeparator"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView2"
+        android:background="@android:color/darker_gray" />
+
+    <EditText
+        android:id="@+id/addBreweryName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:capitalize="sentences"
+        android:layout_below="@+id/addBreweryTitle"
+        android:layout_marginTop="18dp"
+        android:ems="10"
+        android:hint="Berwery name" />
+
+    <AutoCompleteTextView
+        android:id="@+id/addBreweryCountry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/addBreweryName"
+        android:textColor="#000000"
+        android:capitalize ="sentences"
+        android:ems="10"
+        android:hint="Brewery Country" />
+
+    <AutoCompleteTextView
+        android:id="@+id/addBreweryPlace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:textColor="#000000"
+        android:capitalize ="sentences"
+        android:layout_below="@+id/addBreweryCountry"
+        android:ems="10"
+        android:hint="Brewery Place" />
+
+    <Button
+        android:id="@+id/addbrewerysubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/addBreweryPlace"
+        android:layout_below="@+id/addBreweryPlace"
+        android:enabled="false"
+        android:text="Submit" />
+
+</RelativeLayout>

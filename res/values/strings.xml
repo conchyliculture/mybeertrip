@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyBeerTrip</string>
+    <string name="beer_db_file_external_path">fr.renzo.mybeertrip/beer.db</string>
+    <string name="menu_settings">Settings</string>
+    <string name="add_new_beer_infos">Add New Beer Infos</string>
+    <string name="appdir">fr.renzo.mybeertrip</string>
+
+</resources>
