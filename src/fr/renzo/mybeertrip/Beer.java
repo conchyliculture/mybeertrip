@@ -1,22 +1,21 @@
 package fr.renzo.mybeertrip;
 
+import fr.renzo.mybeertrip.databases.MyBeerTripDatabase;
+
 public class Beer {
     private String name;
     private BeerColor color;
     private Brewery brewery;
-    private int barcode;
+    private String barcode;
     //TODO picturesw
 
 
-    public Beer (String name, BeerColor color, Brewery brewery, int barcode) {
-        this.name=name;
-        this.color=color;
-        this.brewery=brewery;
-        this.barcode=barcode;
-    }
+   	public Beer() {
+		// TODO Auto-generated constructor stub
+	}
 
 
-    public String getName() {
+	public String getName() {
         return name;
     }
 
@@ -46,12 +45,12 @@ public class Beer {
     }
 
 
-    public int getBarcode() {
+    public String getBarcode() {
         return barcode;
     }
 
-
-    public void setBarcode(int barcode) {
-        this.barcode = barcode;
-    }
+	public void setBarcode(String string) {
+		this.barcode= string;
+		
+	}
 }

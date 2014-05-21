@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 import fr.renzo.mybeertrip.Beer;
 import fr.renzo.mybeertrip.R;
@@ -20,11 +21,14 @@ public class AddDrinkActivity extends Activity {
 
 	
 	private MyBeerTripDatabase beerdbh;
+	private EditText textbeername;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_drink);
 		this.beerdbh = ((MyBeerTrip) getApplication()).getMyBeerTripDatabaseHandler();
+		
+		this.textbeername = (EditText) findViewById(R.id.editBeerName);
 		
 		Button scanbeerbutton = (Button) findViewById(R.id.buttonScanBarcode);
 		scanbeerbutton.setOnClickListener(new ScanBeerClickListener());
@@ -43,7 +47,8 @@ public class AddDrinkActivity extends Activity {
 		  IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
 		  if (scanResult != null) {
 			  String res = scanResult.getContents();
-			  Beer b = this.beerdbh.getBeerFromBarcode(res);
+			  Beer b = this.beerdbh.findBeerByBarcode(res);
+			  this.textbeername.setText(b.getName());
 		  }
 		  
 		}
