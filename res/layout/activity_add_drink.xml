@@ -1,46 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="Add new Beer experience"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <EditText
-        android:id="@+id/editBeerBrewery"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editBeerName"
-        android:ems="10"
-        android:text="Brewery" />
-
-    <EditText
-        android:id="@+id/editBeerName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView2"
-        android:layout_marginTop="116dp"
-        android:ems="10"
-        android:text="Beer name" >
-
-        <requestFocus />
-    </EditText>
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
     <Button
-        android:id="@+id/buttonScanBarcode"
-        android:layout_width="wrap_content"
+        android:id="@+id/button1"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView2"
-        android:text="Scan a barcode" />
+        android:enabled="false"
+        android:text="Add Drink" />
 
-</RelativeLayout>
+		<LinearLayout android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:orientation="vertical"
+		android:id="@+id/addDrinkFragmentContainer">
+	    
+	</LinearLayout>
+</LinearLayout>

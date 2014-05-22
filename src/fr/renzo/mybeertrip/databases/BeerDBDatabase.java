@@ -144,6 +144,7 @@ public class BeerDBDatabase implements MyBeerTripDatabase{
 	public Cursor myRawQuery(String query, String[] objects )  {
 			Cursor c=null;
 			try {
+				Log.d(TAG,query+""+objects.toString());
 				c = this.sqlh.rawQuery(query, objects);		
 			} catch (SQLiteException e) {
 				if (c!= null){
@@ -194,5 +195,19 @@ public class BeerDBDatabase implements MyBeerTripDatabase{
 		
 		return resbeer;
 	}
+
+	@Override
+	public Cursor rawQuery(String query, String[] objects) {
+		return myRawQuery(query,objects);
+	}
+
+	@Override
+	public Cursor searchBeersByName(String constraint) {
+		Log.d(TAG,"Search beers with name "+constraint);
+		return myRawQuery("SELECT "+C_BEERS_ID+" AS _id, "+C_BEERS_NAME +" FROM "+T_BEERS+
+				" WHERE "+C_BEERS_NAME+" LIKE ?", "%"+constraint+"%");
+		
+	}
+
 
 }

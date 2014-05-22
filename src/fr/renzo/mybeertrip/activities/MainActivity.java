@@ -27,6 +27,18 @@ public class MainActivity extends Activity {
 		
 		Button scanbeerbutton = (Button) findViewById(R.id.buttonAddDrink);
 		scanbeerbutton.setOnClickListener(new AddDrinkClickListener());
+		
+		Button addbeerbutton = (Button) findViewById(R.id.buttonAddBeer);
+		addbeerbutton.setOnClickListener(new AddBeerClickListener());
+		
+		Button searchbeerbutton = (Button) findViewById(R.id.buttonSearchBeer);
+		searchbeerbutton.setOnClickListener(new SearchBeerClickListener());
+		
+		Button showdrinksbutton = (Button) findViewById(R.id.buttonShowDrinks);
+		showdrinksbutton.setOnClickListener(new ShowDrinksClickListener());
+		
+		Button statisticsbutton = (Button) findViewById(R.id.buttonStatistics);
+		statisticsbutton.setOnClickListener(new ShowStatisticsClickListener());
 	}
 	
 	
@@ -53,6 +65,37 @@ public class MainActivity extends Activity {
 		public void onClick(View v) {
 			Intent i = new Intent(MainActivity.this, AddDrinkActivity.class);
 			startActivity(i);
+		}
+	}
+	public class AddBeerClickListener implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			//TODO
+//			Intent i = new Intent(MainActivity.this, AddDrinkActivity.class);
+//			startActivity(i);
+		}
+	}
+	public class SearchBeerClickListener implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			//TODO
+//			Intent i = new Intent(MainActivity.this, AddDrinkActivity.class);
+//			startActivity(i);
+		}
+	}
+	public class ShowDrinksClickListener implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			//TODO
+//			Intent i = new Intent(MainActivity.this, AddDrinkActivity.class);
+//			startActivity(i);
+		}
+	}public class ShowStatisticsClickListener implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			//TODO
+//			Intent i = new Intent(MainActivity.this, AddDrinkActivity.class);
+//			startActivity(i);
 		}
 	}
 }

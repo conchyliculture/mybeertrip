@@ -7,8 +7,9 @@
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_alignParentRight="true"
+        android:layout_weight="0.5"
         android:orientation="vertical" >
 
         <LinearLayout
@@ -21,6 +22,31 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
                 android:text="Add a Drink" />
+            <Button
+                android:id="@+id/buttonAddBeer"
+                android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                android:text="Add a Beer" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/buttonSearchBeer"
+                android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                android:text="Search a Beer" />
+            <Button
+                android:id="@+id/buttonShowDrinks"
+                android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                android:text="Show Drinks" />
+
+            
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
