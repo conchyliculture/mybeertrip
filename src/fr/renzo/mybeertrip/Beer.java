@@ -1,18 +1,20 @@
 package fr.renzo.mybeertrip;
 
-import fr.renzo.mybeertrip.databases.MyBeerTripDatabase;
+import java.io.Serializable;
 
-public class Beer {
-    private String name;
+
+public class Beer implements Serializable{
+
+	private static final long serialVersionUID = -3512688813404580801L;
+	private String name;
     private BeerColor color;
     private Brewery brewery;
     private String barcode;
+	private float abv;
     //TODO picturesw
 
 
-   	public Beer() {
-		// TODO Auto-generated constructor stub
-	}
+   	public Beer() {}
 
 
 	public String getName() {
@@ -51,6 +53,29 @@ public class Beer {
 
 	public void setBarcode(String string) {
 		this.barcode= string;
+		
+	}
+
+
+	public void setABV(float abv) {
+		this.abv = abv;
+	}
+
+
+	public void setCountry(Object object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void setRegion(Object object) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void setCity(Object object) {
+		// TODO Auto-generated method stub
 		
 	}
 }

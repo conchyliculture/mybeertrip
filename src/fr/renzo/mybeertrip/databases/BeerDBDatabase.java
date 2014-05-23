@@ -21,8 +21,9 @@ import fr.renzo.mybeertrip.Beer;
 import fr.renzo.mybeertrip.R;
 
 public class BeerDBDatabase implements MyBeerTripDatabase{
-	
-	private static final String TAG = "MyBeerTripDatabase";
+
+	private static final String TAG = "BeerDBDatabase";
+
 
 	/* CREATE TABLE "beers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
 	 * "key" varchar(255) NOT NULL, 
@@ -52,7 +53,13 @@ public class BeerDBDatabase implements MyBeerTripDatabase{
 	public static final String C_BEERS_BARCODE = "barcode";
 	public static final String C_BEERS_ID = "id";
 	public static final String C_BEERS_NAME = "title";
-	
+	public static final String C_BEERS_ABV = "abv";
+	public static final String C_BEERS_BREWERY_ID = "brewery_id";
+	public static final String C_BEERS_TXT = "txt";
+	public static final String C_BEERS_COUNTRY_ID = "country_id";
+	public static final String C_BEERS_REGION_ID = "region_id";
+	public static final String C_BEERS_CITY_ID = "city_id";
+
 	private SQLiteDatabase sqlh;
 	private Context context;
 
@@ -62,19 +69,19 @@ public class BeerDBDatabase implements MyBeerTripDatabase{
 		this.context = context;
 		String dbpath = copyDB("beed.db");//TODO BAD STRING EN DUR
 		this.sqlh = SQLiteDatabase.openDatabase(dbpath, null, SQLiteDatabase.OPEN_READWRITE);
-		
-		this.mapBeerColNameToIndex = doMapBeerColNameToIndex();
-		Iterator iterator = mapBeerColNameToIndex.keySet().iterator();
-		 
-		while (iterator.hasNext()) {
-		   String key = iterator.next().toString();
-		   String value = mapBeerColNameToIndex.get(key).toString();
-		 
-		  Log.d(TAG,key + " " + value);
-		}
-		Log.d(TAG,"Map count = "+this.mapBeerColNameToIndex.size());
+
+		//		this.mapBeerColNameToIndex = doMapBeerColNameToIndex();
+		//		Iterator iterator = mapBeerColNameToIndex.keySet().iterator();
+		//		 
+		//		while (iterator.hasNext()) {
+		//		   String key = iterator.next().toString();
+		//		   String value = mapBeerColNameToIndex.get(key).toString();
+		//		 
+		//		  Log.d(TAG,key + " " + value);
+		//		}
+		//		Log.d(TAG,"Map count = "+this.mapBeerColNameToIndex.size());
 	}
-	
+
 	private String copyDB(String dbpath) {
 		AssetManager am = context.getAssets();
 		String respath = null;
@@ -82,7 +89,7 @@ public class BeerDBDatabase implements MyBeerTripDatabase{
 			InputStream in = am.open("beer.db");//TODO
 			File outFile = new File(Environment.getExternalStorageDirectory(),context.getString(R.string.beer_db_file_external_path));
 			// LOL TODO
-			
+
 			if (outFile.exists()) {
 				outFile.delete();
 			}
@@ -98,10 +105,10 @@ public class BeerDBDatabase implements MyBeerTripDatabase{
 				out.flush();
 				out.close();
 			}
-			
+
 			respath= outFile.getAbsolutePath();
 			patchDB(respath);
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -110,7 +117,7 @@ public class BeerDBDatabase implements MyBeerTripDatabase{
 
 	private HashMap<String, Integer> doMapBeerColNameToIndex (){
 		HashMap<String, Integer> map = new HashMap<String,Integer>();
-		
+
 		Cursor c = myRawQuery("SELECT * FROM "+T_BEERS);
 		if (c.moveToFirst()){
 			int count = c.getColumnCount();
@@ -119,20 +126,20 @@ public class BeerDBDatabase implements MyBeerTripDatabase{
 				map.put(name, i);
 			}
 		}
-		
+
 		return map;
 	}
-	
+
 	private void patchDB(String dbpath) {
 		SQLiteDatabase tempsqlh = SQLiteDatabase.openDatabase(dbpath, null, SQLiteDatabase.OPEN_READWRITE);
-		
+
 		tempsqlh.execSQL("ALTER TABLE "+T_BEERS+" ADD COLUMN "+C_BEERS_BARCODE+" VARCHAR(255)");
 		Log.d(TAG,"Added column");
 		tempsqlh.execSQL("UPDATE "+T_BEERS+" SET "+C_BEERS_BARCODE+" = '54050051' WHERE "+C_BEERS_ID+" = 1201 ");
 		tempsqlh.close();
 	}
 
-	
+
 	public Cursor myRawQuery(String query)  {
 		return myRawQuery(query,new String[0]);
 	}
@@ -142,19 +149,19 @@ public class BeerDBDatabase implements MyBeerTripDatabase{
 	}
 
 	public Cursor myRawQuery(String query, String[] objects )  {
-			Cursor c=null;
-			try {
-				Log.d(TAG,query+""+objects.toString());
-				c = this.sqlh.rawQuery(query, objects);		
-			} catch (SQLiteException e) {
-				if (c!= null){
-					c.close();
-				}
-				Log.d(TAG,"SQL error "+e.getLocalizedMessage());
+		Cursor c=null;
+		try {
+			Log.d(TAG,query);
+			c = this.sqlh.rawQuery(query, objects);		
+		} catch (SQLiteException e) {
+			if (c!= null){
+				c.close();
 			}
+			Log.d(TAG,"SQL error "+e.getLocalizedMessage());
+		}
 		return c;
 	}
-	
+
 	public Beer makeBeerFromStarQuery(Cursor c){
 		Beer b = new Beer();
 		int count = c.getColumnCount();
@@ -175,7 +182,7 @@ public class BeerDBDatabase implements MyBeerTripDatabase{
 		}
 		return b;
 	}
-	
+
 	@Override
 	public ArrayList<Beer> findBeersByName(String name) {
 		// TODO Auto-generated method stub
@@ -186,13 +193,13 @@ public class BeerDBDatabase implements MyBeerTripDatabase{
 	public Beer findBeerByBarcode(String barcode) {
 		Beer resbeer = null;
 		Cursor c= myRawQuery("SELECT * from "+T_BEERS+" WHERE "+
-									C_BEERS_BARCODE + " = ?", barcode);
+				C_BEERS_BARCODE + " = ?", barcode);
 		if (c.moveToFirst()){
 			resbeer = makeBeerFromStarQuery(c);
 		}
-		
+
 		c.close();
-		
+
 		return resbeer;
 	}
 
@@ -206,7 +213,62 @@ public class BeerDBDatabase implements MyBeerTripDatabase{
 		Log.d(TAG,"Search beers with name "+constraint);
 		return myRawQuery("SELECT "+C_BEERS_ID+" AS _id, "+C_BEERS_NAME +" FROM "+T_BEERS+
 				" WHERE "+C_BEERS_NAME+" LIKE ?", "%"+constraint+"%");
-		
+
+	}
+
+	private Cursor getAllBeerDataFromString(String search) {
+		/* CREATE TABLE "beers" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+		 * "key" varchar(255) NOT NULL, 
+		 * "title" varchar(255) NOT NULL, 
+		 * "synonyms" varchar(255), 
+		 * "web" varchar(255), 
+		 * "since" integer, 
+		 * "seasonal" boolean DEFAULT 'f' NOT NULL, 
+		 * "limited" boolean DEFAULT 'f' NOT NULL, 
+		 * "kcal" decimal, 
+		 * "abv" decimal, 
+		 * "og" decimal, 
+		 * "srm" integer, 
+		 * "ibu" integer, 
+		 * "brewery_id" integer, 
+		 * "brand_id" integer, 
+		 * "grade" integer DEFAULT 4 NOT NULL, 
+		 * "txt" varchar(255), 
+		 * "txt_auto" boolean DEFAULT 'f' NOT NULL, 
+		 * "country_id" integer NOT NULL, 
+		 * "region_id" integer, 
+		 * "city_id" integer, 
+		 * "created_at" datetime NOT NULL, 
+		 * "updated_at" datetime NOT NULL);
+		 */
+		Cursor c = myRawQuery("SELECT "+C_BEERS_ID+", "
+				+C_BEERS_NAME+", "
+				+C_BEERS_ABV+", "
+				+C_BEERS_BREWERY_ID+", "
+				+C_BEERS_TXT+", "
+				+C_BEERS_COUNTRY_ID+", "
+				+C_BEERS_REGION_ID+", "
+				+C_BEERS_CITY_ID
+				+" FROM "+T_BEERS+" " + search);
+
+		return c;
+	}
+
+	@Override
+	public Beer getBeerById(long _id) {
+
+		Cursor c = getAllBeerDataFromString("WHERE "+C_BEERS_ID+" = "+_id);
+		if (c.moveToFirst()) {
+			Beer b= new Beer();
+			b.setName(c.getString(1));
+			b.setABV(c.getFloat(2));
+			b.setBrewery(null); // TODO
+			b.setCountry(null); // TODO
+			b.setRegion(null); // TODO
+			b.setCity(null); // TODO
+			return b;
+		}
+		return null;
 	}
 
 

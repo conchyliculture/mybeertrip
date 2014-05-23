@@ -1,57 +1,55 @@
 package fr.renzo.mybeertrip.activities;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar.Tab;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import fr.renzo.mybeertrip.Beer;
-import fr.renzo.mybeertrip.R;
 import fr.renzo.mybeertrip.MyBeerTrip;
+import fr.renzo.mybeertrip.R;
 import fr.renzo.mybeertrip.databases.MyBeerTripDatabase;
 
 
 public class AddDrinkActivity extends  ActionBarActivity {
 
-
-
-	private MyBeerTripDatabase beerdbh;
-	private EditText textbeername;
-	private SelectBeerFragment selectBeerFragment;
-	private SelectPlaceFragment selectPlaceFragment;
-	private SelectPictureFragment selectPictureFragment;
-	private SelectNoteFragment selectNoteFragment;
+	private static final String TAG = "AddDrinkActivity";
+	private MyBeerTripDatabase beerdbh;	
+	private Beer selectedbeer;
+	private ActionBar bar;
+	private Tab selectBeerTab;
+	private Tab selectPlaceTab;
+	private Tab selectNoteTab;
+	private Tab selectPictureTab;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setTitle("Add a new Drink");
-		ActionBar bar = getSupportActionBar();
+		bar = getSupportActionBar();
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		setContentView(R.layout.activity_add_drink);
 		
-//		Button scanbarcode = (Button) findViewById(R.id.fragment_search_beer_scan_barcode_button);
-//		scanbarcode.setOnClickListener(new ScanBeerClickListener());
+		this.beerdbh = ((MyBeerTrip)getApplication()).getMyBeerTripDatabaseHandler();
 
-		selectBeerFragment = new SelectBeerFragment();
-		selectPlaceFragment = new SelectPlaceFragment();
-		selectNoteFragment = new SelectNoteFragment();
-		selectPictureFragment = new SelectPictureFragment();
 
-		Tab selectBeerTab = bar.newTab().setText("Select Beer");
-		Tab selectPlaceTab = bar.newTab().setText("Select Place");
-		Tab selectNoteTab = bar.newTab().setText("Add Note");
-		Tab selectPictureTab = bar.newTab().setText("Add Picture");
+		selectBeerTab = bar.newTab().setText("Select Beer");
+		selectPlaceTab = bar.newTab().setText("Select Place");
+		selectNoteTab = bar.newTab().setText("Add Note");
+		selectPictureTab = bar.newTab().setText("Add Picture");
 
 		selectBeerTab.setTabListener(new DrinkTabsListener<SelectBeerFragment>(
 				this,"selectbeer",SelectBeerFragment.class)
@@ -70,6 +68,38 @@ public class AddDrinkActivity extends  ActionBarActivity {
 		bar.addTab(selectPlaceTab);
 		bar.addTab(selectNoteTab);
 		bar.addTab(selectPictureTab);
+		
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    // Inflate the menu items for use in the action bar
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.add_drink_activity_menu, menu);
+	    return super.onCreateOptionsMenu(menu);
+	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle presses on the action bar items
+	    switch (item.getItemId()) {
+	        case R.id.action_add_drink:
+	            addDrink();
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
+
+
+	private void addDrink() {
+		if (this.selectedbeer == null) {
+			showMessage("Please select a beer first");
+		}
+		
+	}
+
+	private void showMessage(String string) {
+		Toast.makeText(this, string, Toast.LENGTH_LONG).show();
 	}
 
 	public static class DrinkTabsListener<T extends Fragment> implements ActionBar.TabListener {
@@ -114,24 +144,41 @@ public class AddDrinkActivity extends  ActionBarActivity {
 			// User selected the already selected tab. Usually do nothing.
 		}
 	}
-	public class ScanBeerClickListener implements OnClickListener {
 
-		@Override
-		public void onClick(View v) {
-			IntentIntegrator integrator = new IntentIntegrator(AddDrinkActivity.this);
-			integrator.initiateScan();
-
+		public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+			  IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+			  if (scanResult != null) {
+				  String res = scanResult.getContents();
+				  Log.d(TAG,"Activity +"+res);
+				  Beer b = this.beerdbh.findBeerByBarcode(res);
+				  if (b != null) {
+				 	setSelectedBeer(b);
+				  } else {
+					  Toast.makeText(this, "Can't find this beer in Database", Toast.LENGTH_LONG).show();
+				  }
+			  }
+			  
+			}
+	public void setSelectedBeer(Beer b) {
+		if (b != null) {
+			this.bar.removeTab(this.selectBeerTab);
+			Tab selectedBeerTab = bar.newTab().setText("Selected Beer");
+			
+			selectedBeerTab.setTabListener(new DrinkTabsListener<SelectedBeerFragment>(
+					this,"selectedbeer",SelectedBeerFragment.class)
+					);
+			this.bar.addTab(selectedBeerTab,0,true);
+			this.selectedbeer = b;
 		}
-
 	}
-//		public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-//			  IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-//			  if (scanResult != null) {
-//				  String res = scanResult.getContents();
-//				  Beer b = this.beerdbh.findBeerByBarcode(res);
-//				  this.textbeername.setText(b.getName());
-//			  }
-//			  
-//			}
+
+	public MyBeerTripDatabase getMyBeerTripDatabase() {
+		
+		return this.beerdbh;
+	}
+
+	public Beer getSelectedBeer() {
+		return this.selectedbeer;
+	}
 
 }

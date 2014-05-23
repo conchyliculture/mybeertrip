@@ -19,4 +19,6 @@ public interface MyBeerTripDatabase {
 	public Beer findBeerByBarcode(String res);
 
 	public Cursor searchBeersByName(String constraint);
+
+	public Beer getBeerById(long _id);
 }

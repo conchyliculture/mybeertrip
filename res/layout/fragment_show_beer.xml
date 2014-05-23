@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-		<LinearLayout android:layout_height="wrap_content"
-		android:layout_width="match_parent"
-		android:orientation="vertical"
-		android:id="@+id/addDrinkFragmentContainer">
-	    
-	</LinearLayout>
+    <TextView
+        android:id="@+id/show_beer_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
 </LinearLayout>

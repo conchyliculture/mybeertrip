@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/searchbeerheader1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select a Beer : "
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/searchbeerheader2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/abc_action_bar_icon_vertical_padding"
+        android:text="1 - Scan its barcode "
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/fragment_search_beer_scan_barcode_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Scan barcode" />
+
+    <TextView
+        android:id="@+id/searchbeerheader2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/abc_action_bar_icon_vertical_padding"
+        android:text="2 - Enter its name"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <AutoCompleteTextView
+        android:id="@+id/fragment_search_beer_autocomplete_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:completionThreshold="3"
+        android:ems="10"
+        android:hint="Search Beer Name" >
+
+        <requestFocus />
+    </AutoCompleteTextView>
+
+    <TextView
+        android:id="@+id/searchbeerheader3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/abc_action_bar_icon_vertical_padding"
+        android:text="3 - Add it in the DB"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/fragment_search_beer_add_beer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Add new beer" />
+
+</LinearLayout>

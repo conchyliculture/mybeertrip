@@ -5,5 +5,8 @@
     <string name="menu_settings">Settings</string>
     <string name="add_new_beer_infos">Add New Beer Infos</string>
     <string name="appdir">fr.renzo.mybeertrip</string>
-
+    
+    
+    <string name="action_add_drink">action_add_drink</string>
+	<string name="action_settings">action_settings</string>
 </resources>
