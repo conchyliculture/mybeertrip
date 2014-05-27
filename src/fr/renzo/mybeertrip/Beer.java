@@ -7,7 +7,6 @@ public class Beer implements Serializable{
 
 	private static final long serialVersionUID = -3512688813404580801L;
 	private String name;
-    private BeerColor color;
     private Brewery brewery;
     private String barcode;
 	private float abv;
@@ -24,16 +23,6 @@ public class Beer implements Serializable{
 
     public void setName(String name) {
         this.name = name;
-    }
-
-
-    public BeerColor getColor() {
-        return color;
-    }
-
-
-    public void setColor(BeerColor color) {
-        this.color = color;
     }
 
 
