@@ -30,6 +30,11 @@
         <activity
             android:name="fr.renzo.mybeertrip.activities.AddDrinkActivity"
             android:label="adddrinkactivity" >
+       
+        </activity>
+        <activity
+            android:name="fr.renzo.mybeertrip.activities.SearchBeerActivity"
+            android:label="searchbeeractivity" >
         </activity>
         <activity
             android:name="fr.renzo.mybeertrip.activities.AddBeerActivity"

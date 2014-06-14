@@ -3,14 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
-	<LinearLayout android:layout_height="wrap_content"
-		android:layout_width="match_parent"
-		android:orientation="vertical"
-		android:id="@+id/addDrinkFragmentContainer">
-	    
-	</LinearLayout>
-
-
-
+    
+ <fragment
+     android:id="@+id/search_beer_fragment"
+     android:name="fr.renzo.mybeertrip.activities.SelectBeerFragment"
+     android:layout_width="match_parent"
+     android:layout_height="0dip"
+     android:layout_weight="1" />
+    
 </LinearLayout>

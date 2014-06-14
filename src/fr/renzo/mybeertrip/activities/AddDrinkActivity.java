@@ -1,7 +1,7 @@
 package fr.renzo.mybeertrip.activities;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -12,8 +12,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -25,69 +23,84 @@ import fr.renzo.mybeertrip.R;
 import fr.renzo.mybeertrip.databases.MyBeerTripDatabase;
 
 
-public class AddDrinkActivity extends  ActionBarActivity {
+public class AddDrinkActivity extends  ActionBarActivity implements SelectBeerFragment.OnBeerSelectedListener,
+SelectedBeerFragment.OnDeleteBeerListener{
 
 	private static final String TAG = "AddDrinkActivity";
+	
+	private static final String LAST_SELECTED_BEER_NAME = "LAST_SELECTED_BEER_NAME";
+	
+	private static final String FRAGMENT_SELECT_BEER_TAG = "fragmentselectbeer";
+	private static final String FRAGMENT_SELECT_PLACE_TAG = "fragmentselectplace";
 	private MyBeerTripDatabase beerdbh;	
 	private Beer selectedbeer;
 	private ActionBar bar;
-	private Tab selectBeerTab;
-	private Tab selectPlaceTab;
-	private Tab selectNoteTab;
-	private Tab selectPictureTab;
+	private SharedPreferences prefs;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		this.prefs = getPreferences(0);
+
 		setTitle("Add a new Drink");
 		bar = getSupportActionBar();
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		setContentView(R.layout.activity_add_drink);
-		
+
 		this.beerdbh = ((MyBeerTrip)getApplication()).getMyBeerTripDatabaseHandler();
 
 
-		selectBeerTab = bar.newTab().setText("Select Beer");
-		selectPlaceTab = bar.newTab().setText("Select Place");
-		selectNoteTab = bar.newTab().setText("Add Note");
-		selectPictureTab = bar.newTab().setText("Add Picture");
 
+		Tab selectPlaceTab = bar.newTab().setText("Select Place");
+		Tab selectNoteTab = bar.newTab().setText("Add Note");
+		Tab selectPictureTab = bar.newTab().setText("Add Picture");
+
+
+		Tab selectBeerTab = bar.newTab()
+				.setTag(FRAGMENT_SELECT_BEER_TAG)
+				.setText("Select Beer");
 		selectBeerTab.setTabListener(new DrinkTabsListener<SelectBeerFragment>(
-				this,"selectbeer",SelectBeerFragment.class)
+				this,FRAGMENT_SELECT_BEER_TAG,SelectBeerFragment.class)
 				);
+		bar.addTab(selectBeerTab);
+
+		if (prefs.contains(LAST_SELECTED_BEER_NAME)) {
+			Beer b = this.beerdbh.getBeerByName(prefs.getString(LAST_SELECTED_BEER_NAME, null));
+			setSelectedBeer(b);
+		} 
+
 		selectPlaceTab.setTabListener(new DrinkTabsListener<SelectPlaceFragment>(
-				this,"selectplace",SelectPlaceFragment.class)
+				this,FRAGMENT_SELECT_PLACE_TAG,SelectPlaceFragment.class)
 				);
+		bar.addTab(selectPlaceTab);
+
 		selectNoteTab.setTabListener(new DrinkTabsListener<SelectNoteFragment>(
 				this,"selectnote",SelectNoteFragment.class)
 				);
+		bar.addTab(selectNoteTab);
+
 		selectPictureTab.setTabListener(new DrinkTabsListener<SelectPictureFragment>(
 				this,"selectpic",SelectPictureFragment.class)
 				);
-
-		bar.addTab(selectBeerTab);
-		bar.addTab(selectPlaceTab);
-		bar.addTab(selectNoteTab);
 		bar.addTab(selectPictureTab);
-		
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    // Inflate the menu items for use in the action bar
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.add_drink_activity_menu, menu);
-	    return super.onCreateOptionsMenu(menu);
+		// Inflate the menu items for use in the action bar
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.add_drink_activity_menu, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle presses on the action bar items
-	    switch (item.getItemId()) {
-	        case R.id.action_add_drink:
-	            addDrink();
-	            return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+		case R.id.action_add_drink:
+			addDrink();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 
@@ -95,7 +108,7 @@ public class AddDrinkActivity extends  ActionBarActivity {
 		if (this.selectedbeer == null) {
 			showMessage("Please select a beer first");
 		}
-		
+
 	}
 
 	private void showMessage(String string) {
@@ -103,8 +116,9 @@ public class AddDrinkActivity extends  ActionBarActivity {
 	}
 
 	public static class DrinkTabsListener<T extends Fragment> implements ActionBar.TabListener {
+
 		private Fragment mFragment;
-		private final Activity mActivity;
+		private final ActionBarActivity mActivity;
 		private final String mTag;
 		private final Class<T> mClass;
 
@@ -113,7 +127,7 @@ public class AddDrinkActivity extends  ActionBarActivity {
 		 * @param tag  The identifier tag for the fragment
 		 * @param clz  The fragment's Class, used to instantiate the fragment
 		 */
-		public DrinkTabsListener(Activity activity, String tag, Class<T> clz) {
+		public DrinkTabsListener(ActionBarActivity activity, String tag, Class<T> clz) {
 			mActivity = activity;
 			mTag = tag;
 			mClass = clz;
@@ -134,6 +148,8 @@ public class AddDrinkActivity extends  ActionBarActivity {
 		}
 
 		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+			mFragment = mActivity.getSupportFragmentManager()
+					.findFragmentByTag(mTag);
 			if (mFragment != null) {
 				// Detach the fragment, because another one is being attached
 				ft.detach(mFragment);
@@ -145,40 +161,88 @@ public class AddDrinkActivity extends  ActionBarActivity {
 		}
 	}
 
-		public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-			  IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-			  if (scanResult != null) {
-				  String res = scanResult.getContents();
-				  Log.d(TAG,"Activity +"+res);
-				  Beer b = this.beerdbh.findBeerByBarcode(res);
-				  if (b != null) {
-				 	setSelectedBeer(b);
-				  } else {
-					  Toast.makeText(this, "Can't find this beer in Database", Toast.LENGTH_LONG).show();
-				  }
-			  }
-			  
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+		if (scanResult != null) {
+			String res = scanResult.getContents();
+			Log.d(TAG,"Activity +"+res);
+			if (res!=null) { // Check we didn't just escape scanning thing
+				Beer b = this.beerdbh.findBeerByBarcode(res);
+				if (b != null) {
+					setSelectedBeer(b);
+				} else {
+					Toast.makeText(this, "Can't find this beer in Database", Toast.LENGTH_LONG).show();
+				}
 			}
+		}
+
+	}
 	public void setSelectedBeer(Beer b) {
 		if (b != null) {
-			this.bar.removeTab(this.selectBeerTab);
-			Tab selectedBeerTab = bar.newTab().setText("Selected Beer");
-			
-			selectedBeerTab.setTabListener(new DrinkTabsListener<SelectedBeerFragment>(
-					this,"selectedbeer",SelectedBeerFragment.class)
-					);
-			this.bar.addTab(selectedBeerTab,0,true);
+			//			if (bar.getTabCount()>0 && bar.getTabAt(0).getTag()==FRAGMENT_SELECT_BEER_TAG) {
+			//				bar.removeTab(this.selectBeerTab);
+			//			}
+			//			selectedBeerTab = bar.newTab()
+			//					.setTag("Selected Beer")
+			//					.setText("Selected Beer");
+			//
+			//			selectedBeerTab.setTabListener(new DrinkTabsListener<SelectedBeerFragment>(
+			//					this,FRAGMENT_SELECTED_BEER_TAG,SelectedBeerFragment.class)
+			//					);
+			//			this.bar.addTab(selectedBeerTab,0,true);
+
+			SelectedBeerFragment sbf = new SelectedBeerFragment();
+			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+			transaction.replace(android.R.id.content, sbf, FRAGMENT_SELECT_BEER_TAG);
+			//transaction.addToBackStack(null);
+			transaction.commit();
+
 			this.selectedbeer = b;
+			this.prefs.edit().putString(LAST_SELECTED_BEER_NAME, b.getName()).commit();
+
 		}
 	}
+	public void unSelectBeer(){
 
-	public MyBeerTripDatabase getMyBeerTripDatabase() {
-		
-		return this.beerdbh;
+		//			if (bar.getTabCount()>0 && bar.getTabAt(0).getTag()==FRAGMENT_SELECTED_BEER_TAG) {
+		//				bar.removeTab(this.selectedBeerTab);
+		//			}
+		//			selectBeerTab = bar.newTab()
+		//					.setTag(FRAGMENT_SELECT_BEER_TAG)
+		//					.setText("Selected Beer");
+		//
+		//			selectBeerTab.setTabListener(new DrinkTabsListener<SelectBeerFragment>(
+		//					this,FRAGMENT_SELECT_BEER_TAG,SelectBeerFragment.class)
+		//					);
+		//			this.bar.addTab(selectBeerTab,0,true);
+		//				
+
+		SelectBeerFragment sbf = new SelectBeerFragment();
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		transaction.replace(android.R.id.content, sbf, FRAGMENT_SELECT_BEER_TAG);
+		//transaction.addToBackStack(null);
+		transaction.commit();
+
+		this.selectedbeer = null;
+		this.prefs.edit().remove(LAST_SELECTED_BEER_NAME).commit();	
 	}
 
 	public Beer getSelectedBeer() {
 		return this.selectedbeer;
 	}
+
+	@Override
+	public void onBeerSelected(Beer beer) {
+		setSelectedBeer(beer);
+	}
+
+	@Override
+	public void onBeerDeleted() {
+		unSelectBeer();
+
+	}
+
+
+
 
 }

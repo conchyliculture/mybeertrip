@@ -192,14 +192,15 @@ public class BeerDBDatabase implements MyBeerTripDatabase{
 	@Override
 	public Beer findBeerByBarcode(String barcode) {
 		Beer resbeer = null;
-		Cursor c= myRawQuery("SELECT * from "+T_BEERS+" WHERE "+
-				C_BEERS_BARCODE + " = ?", barcode);
-		if (c.moveToFirst()){
-			resbeer = makeBeerFromStarQuery(c);
+		if (barcode != null) {
+			Cursor c= myRawQuery("SELECT * from "+T_BEERS+" WHERE "+
+					C_BEERS_BARCODE + " = ?", barcode);
+			if (c.moveToFirst()){
+				resbeer = makeBeerFromStarQuery(c);
+			}
+			c.close();
 		}
-
-		c.close();
-
+		
 		return resbeer;
 	}
 
@@ -256,19 +257,34 @@ public class BeerDBDatabase implements MyBeerTripDatabase{
 
 	@Override
 	public Beer getBeerById(long _id) {
-
+		Beer b = null;
 		Cursor c = getAllBeerDataFromString("WHERE "+C_BEERS_ID+" = "+_id);
 		if (c.moveToFirst()) {
-			Beer b= new Beer();
+			b= new Beer();
 			b.setName(c.getString(1));
 			b.setABV(c.getFloat(2));
 			b.setBrewery(null); // TODO
 			b.setCountry(null); // TODO
 			b.setRegion(null); // TODO
 			b.setCity(null); // TODO
-			return b;
 		}
-		return null;
+		c.close();
+		return b;
+	}
+
+	@Override
+	public Beer getBeerByName(String name) {
+		return getBeerById(getBeerIdByName(name));
+	}
+
+	private long getBeerIdByName(String name) {
+		long res=-1;
+		Cursor c = myRawQuery("SELECT "+C_BEERS_ID+" FROM "+T_BEERS+" WHERE "+C_BEERS_NAME+" = ?",name);
+		if (c.moveToFirst()) {
+			res=c.getLong(0);
+		}
+		c.close();
+		return res;
 	}
 
 

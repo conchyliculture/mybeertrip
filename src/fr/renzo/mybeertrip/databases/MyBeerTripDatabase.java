@@ -21,4 +21,5 @@ public interface MyBeerTripDatabase {
 	public Cursor searchBeersByName(String constraint);
 
 	public Beer getBeerById(long _id);
+	public Beer getBeerByName(String name);
 }
