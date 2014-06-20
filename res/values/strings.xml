@@ -8,5 +8,7 @@
     
     
     <string name="action_add_drink">action_add_drink</string>
+    <string name="action_add_beer">action_add_beer</string>
+    
 	<string name="action_settings">action_settings</string>
 </resources>

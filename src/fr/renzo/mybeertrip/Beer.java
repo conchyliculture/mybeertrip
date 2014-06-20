@@ -8,12 +8,68 @@ public class Beer implements Serializable{
 	private static final long serialVersionUID = -3512688813404580801L;
 	private String name;
     private Brewery brewery;
-    private String barcode;
-	private float abv;
+    private String barcode="";
+	private double abv=0;
     //TODO picturesw
+	private Country country;
+	private boolean seasonal=false;
+	private boolean special=false;
+	private String description="";
+	private long id=-1;
+
+	public String getKey(){
+		return this.name.replaceAll("\\s+","").toLowerCase();
+	}
+
+   	public double getAbv() {
+		return abv;
+	}
+
+	public void setAbv(double abv) {
+		this.abv = abv;
+	}
 
 
-   	public Beer() {}
+	public long getId() {
+		return id;
+	}
+
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+
+	public void setAbv(float abv) {
+		this.abv = abv;
+	}
+
+
+	public Object getSpecial() {
+		return special;
+	}
+
+
+	public Country getCountry() {
+		if (country==null){
+    		return new Country();
+    	} else {
+    		return country;
+    	}
+	}
+
+
+	public boolean isSeasonal() {
+		return seasonal;
+	}
+
+
+	public String getDescription() {
+		return description;
+	}
+
+
+	public Beer() {}
 
 
 	public String getName() {
@@ -27,7 +83,11 @@ public class Beer implements Serializable{
 
 
     public Brewery getBrewery() {
-        return brewery;
+    	if (brewery==null){
+    		return new Brewery();
+    	} else {
+    		return brewery;
+    	}
     }
 
 
@@ -46,25 +106,26 @@ public class Beer implements Serializable{
 	}
 
 
-	public void setABV(float abv) {
-		this.abv = abv;
-	}
-
-
-	public void setCountry(Object object) {
-		// TODO Auto-generated method stub
+	public void setCountry(Country country) {
+		this.country=country;
 		
 	}
 
 
-	public void setRegion(Object object) {
-		// TODO Auto-generated method stub
+	public void setDescription(String beer_description) {
+		this.description = beer_description;
 		
 	}
 
 
-	public void setCity(Object object) {
-		// TODO Auto-generated method stub
+	public void setSeasonal(boolean beer_seasonal) {
+		this.seasonal = beer_seasonal;
+		
+	}
+
+
+	public void setSpecial(boolean beer_special) {
+		this.special = beer_special;
 		
 	}
 }

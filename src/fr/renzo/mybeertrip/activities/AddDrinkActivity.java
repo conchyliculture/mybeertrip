@@ -12,7 +12,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -21,6 +24,7 @@ import fr.renzo.mybeertrip.Beer;
 import fr.renzo.mybeertrip.MyBeerTrip;
 import fr.renzo.mybeertrip.R;
 import fr.renzo.mybeertrip.databases.MyBeerTripDatabase;
+
 
 
 public class AddDrinkActivity extends  ActionBarActivity implements SelectBeerFragment.OnBeerSelectedListener,
@@ -167,7 +171,7 @@ SelectedBeerFragment.OnDeleteBeerListener{
 			String res = scanResult.getContents();
 			Log.d(TAG,"Activity +"+res);
 			if (res!=null) { // Check we didn't just escape scanning thing
-				Beer b = this.beerdbh.findBeerByBarcode(res);
+				Beer b = this.beerdbh.getBeerByBarcode(res);
 				if (b != null) {
 					setSelectedBeer(b);
 				} else {
@@ -179,22 +183,10 @@ SelectedBeerFragment.OnDeleteBeerListener{
 	}
 	public void setSelectedBeer(Beer b) {
 		if (b != null) {
-			//			if (bar.getTabCount()>0 && bar.getTabAt(0).getTag()==FRAGMENT_SELECT_BEER_TAG) {
-			//				bar.removeTab(this.selectBeerTab);
-			//			}
-			//			selectedBeerTab = bar.newTab()
-			//					.setTag("Selected Beer")
-			//					.setText("Selected Beer");
-			//
-			//			selectedBeerTab.setTabListener(new DrinkTabsListener<SelectedBeerFragment>(
-			//					this,FRAGMENT_SELECTED_BEER_TAG,SelectedBeerFragment.class)
-			//					);
-			//			this.bar.addTab(selectedBeerTab,0,true);
 
 			SelectedBeerFragment sbf = new SelectedBeerFragment();
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 			transaction.replace(android.R.id.content, sbf, FRAGMENT_SELECT_BEER_TAG);
-			//transaction.addToBackStack(null);
 			transaction.commit();
 
 			this.selectedbeer = b;
@@ -203,24 +195,9 @@ SelectedBeerFragment.OnDeleteBeerListener{
 		}
 	}
 	public void unSelectBeer(){
-
-		//			if (bar.getTabCount()>0 && bar.getTabAt(0).getTag()==FRAGMENT_SELECTED_BEER_TAG) {
-		//				bar.removeTab(this.selectedBeerTab);
-		//			}
-		//			selectBeerTab = bar.newTab()
-		//					.setTag(FRAGMENT_SELECT_BEER_TAG)
-		//					.setText("Selected Beer");
-		//
-		//			selectBeerTab.setTabListener(new DrinkTabsListener<SelectBeerFragment>(
-		//					this,FRAGMENT_SELECT_BEER_TAG,SelectBeerFragment.class)
-		//					);
-		//			this.bar.addTab(selectBeerTab,0,true);
-		//				
-
 		SelectBeerFragment sbf = new SelectBeerFragment();
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		transaction.replace(android.R.id.content, sbf, FRAGMENT_SELECT_BEER_TAG);
-		//transaction.addToBackStack(null);
 		transaction.commit();
 
 		this.selectedbeer = null;
@@ -230,6 +207,9 @@ SelectedBeerFragment.OnDeleteBeerListener{
 	public Beer getSelectedBeer() {
 		return this.selectedbeer;
 	}
+	
+	
+	
 
 	@Override
 	public void onBeerSelected(Beer beer) {
@@ -241,8 +221,6 @@ SelectedBeerFragment.OnDeleteBeerListener{
 		unSelectBeer();
 
 	}
-
-
 
 
 }

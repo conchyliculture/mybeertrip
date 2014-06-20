@@ -4,8 +4,8 @@ import java.io.File;
 
 import fr.renzo.mybeertrip.MyBeerTrip;
 import fr.renzo.mybeertrip.R;
-import fr.renzo.mybeertrip.databases.BeerDBDatabase;
 import fr.renzo.mybeertrip.databases.MyBeerTripDatabase;
+import fr.renzo.mybeertrip.databases.beerdb.BeerDBDatabase;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -70,9 +70,8 @@ public class MainActivity extends Activity {
 	public class AddBeerClickListener implements OnClickListener {
 		@Override
 		public void onClick(View v) {
-			//TODO
-//			Intent i = new Intent(MainActivity.this, AddDrinkActivity.class);
-//			startActivity(i);
+			Intent i = new Intent(MainActivity.this, AddBeerActivity.class);
+			startActivity(i);
 		}
 	}
 	public class SearchBeerClickListener implements OnClickListener {

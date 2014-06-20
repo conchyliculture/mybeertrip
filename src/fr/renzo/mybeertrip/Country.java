@@ -1,18 +1,20 @@
 package fr.renzo.mybeertrip;
 
-public class Brewery {
-	private long id;
+public class Country {
+
 	private String name;
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
+	private long cid;
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
+	public long getId() {
+		return cid;
+	}
+	public void setId(long cid) {
+		this.cid = cid;
+	}
+
 }

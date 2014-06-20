@@ -30,7 +30,6 @@
         <activity
             android:name="fr.renzo.mybeertrip.activities.AddDrinkActivity"
             android:label="adddrinkactivity" >
-       
         </activity>
         <activity
             android:name="fr.renzo.mybeertrip.activities.SearchBeerActivity"
@@ -39,6 +38,10 @@
         <activity
             android:name="fr.renzo.mybeertrip.activities.AddBeerActivity"
             android:label="addbeeractivity" >
+        </activity>
+        <activity
+            android:name="fr.renzo.mybeertrip.activities.AddBreweryActivity"
+            android:label="addbreweryactivity" >
         </activity>
     </application>
 

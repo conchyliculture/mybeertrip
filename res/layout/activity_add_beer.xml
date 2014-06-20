@@ -1,13 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<ScrollView 
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/scroll" 
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+
+<LinearLayout 
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-		<LinearLayout android:layout_height="wrap_content"
-		android:layout_width="match_parent"
-		android:orientation="vertical"
-		android:id="@+id/addDrinkFragmentContainer">
-	    
-	</LinearLayout>
+    <EditText
+        android:id="@+id/add_beer_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:capitalize="words"
+        android:hint="Beer Name"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <AutoCompleteTextView
+        android:id="@+id/add_beer_country"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Select beer country of origin"
+        android:ems="10" />
+
+    <AutoCompleteTextView
+        android:id="@+id/add_beer_brewery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="Brewery. Long click to add one."
+        android:longClickable="true" />
+
+    <EditText
+        android:id="@+id/add_beer_abv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="ABV / Alcohol %" />
+
+    <Button
+        android:id="@+id/add_beer_add_barcode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Scan barcode" />
+
+    <EditText
+        android:id="@+id/add_beer_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Description"
+        android:inputType="textMultiLine" />
+
+    <CheckBox
+        android:id="@+id/add_beer_seasonal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Seasonal ?" />
+
+    <CheckBox
+        android:id="@+id/add_beer_limited"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Limited ?" />
+	
 </LinearLayout>
+</ScrollView>

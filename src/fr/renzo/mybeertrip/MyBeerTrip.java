@@ -4,8 +4,8 @@ package fr.renzo.mybeertrip;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import fr.renzo.mybeertrip.databases.BeerDBDatabase;
 import fr.renzo.mybeertrip.databases.MyBeerTripDatabase;
+import fr.renzo.mybeertrip.databases.beerdb.BeerDBDatabase;
 
 public class MyBeerTrip extends Application {
 
